@@ -1,9 +1,12 @@
 'use client'
 
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Login() {
+    const router = useRouter()
+
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [errorMsg, setErrorMsg] = useState('')
@@ -19,6 +22,7 @@ export default function Login() {
         axios.post(pre + endpoint, data)
         .then((response)=>{
             console.log(response);
+            router.push('/')
         })
         .catch((error)=>{
             console.log(error);
