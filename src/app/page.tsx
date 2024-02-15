@@ -2,17 +2,19 @@
 
 import { useEffect, useState } from "react";
 
+import Location from "./_component/Location";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
   const router = useRouter()
-  interface Location {
+  interface data {
     id: string;
     name: string;
     parent: string | null;
+    active: boolean;
   }
-  const [locations, setLocations] = useState<Location[]>([])
+  const [locations, setLocations] = useState<data[]>([])
 
   useEffect(() => {
     if (!sessionStorage.getItem('user')) {
@@ -24,7 +26,11 @@ export default function Home() {
       axios.get(pre + endpoint)
       .then((response)=>{
         console.log(response.data.data);
-        setLocations([...response.data.data])
+        const modifiedData = response.data.data.map((loc:any)=> ({
+          ...loc,
+          active: true
+        }));
+        setLocations(modifiedData)
       })
       .catch((error)=>{
         console.log(error);
@@ -32,20 +38,23 @@ export default function Home() {
     }
   }, [])
 
+  const toggleActive = (id: string) => {
+    const updatedLocations = locations.map(location => {
+      if (location.id === id) {
+        return { ...location, active: !location.active };
+      }
+      return location;
+    });
+    setLocations(updatedLocations);
+  }
 
   return (
     <main className="flex justify-center">
-      <div className="w-1/2 mt-20">
-        <h1>Territories</h1>
-        <div>Here are the list of territories</div>
+      <div className="w-1/2 my-20">
+        <h1 className="font-bold">Territories</h1>
+        <div className="font-semibold">Here are the list of territories</div>
         <ul>
-          {
-            locations.map((loc,i)=>{
-              return <li key={i}>
-                <span>*{loc.name}</span>
-              </li>
-            })
-          }
+          <Location locations={locations} parent={null} toggleActive={toggleActive}/>
         </ul>
       </div>
     </main>
