@@ -9,7 +9,7 @@ interface data {
 export default function Location (props: { locations: data[]; parent: null | string; toggleActive: (id:string)=> void }) {
 
     const children = props.locations.filter((loc) => loc.parent === props.parent)
-    console.log(children);
+    // console.log(children);
 
     if (children.length === 0)
         return null;
