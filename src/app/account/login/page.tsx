@@ -1,8 +1,9 @@
 'use client'
 
+import { useEffect, useState } from "react";
+
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 export default function Login() {
     const router = useRouter()
@@ -10,6 +11,12 @@ export default function Login() {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [errorMsg, setErrorMsg] = useState('')
+
+    useEffect(() => {
+        if (sessionStorage.getItem('user')) {
+            router.replace('/')
+        }
+    }, [])
 
     const handleSubmit = (e: any) =>{
         const data = {
