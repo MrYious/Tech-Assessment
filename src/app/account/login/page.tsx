@@ -22,6 +22,7 @@ export default function Login() {
         axios.post(pre + endpoint, data)
         .then((response)=>{
             console.log(response);
+            sessionStorage.setItem('user', JSON.stringify(response.data))
             router.push('/')
         })
         .catch((error)=>{
